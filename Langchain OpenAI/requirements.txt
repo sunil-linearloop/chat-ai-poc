@@ -1,1 +1,5 @@
-
+streamlit
+langchain_openai
+langchain
+tiktoken
+psutil
