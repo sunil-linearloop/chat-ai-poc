@@ -11,7 +11,7 @@ import time
 
 st.set_page_config(page_title="LangChain OpenAI", page_icon=":robot_face:")
 
-os.environ["OPENAI_API_KEY"] = "your-openai-api-key-here"
+os.environ["OPENAI_API_KEY"] = st.secrets['token']
 
 class StreamHandler(BaseCallbackHandler):
     def __init__(self, container, initial_text=""):
