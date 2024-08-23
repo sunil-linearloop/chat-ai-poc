@@ -10,7 +10,7 @@ st.set_page_config(page_title="Chat Groq", page_icon=":robot_face:")
 # Set up Groq API key
 os.environ["GROQ_API_KEY"] = st.secrets['token']
 
-st.title("Traditional Groq Chat Application - LLaMa 3.1 70B")
+st.title("Traditional Groq Chat Application")
 
 model_options = ["llama-3.1-70b-versatile", "llama-3.1-8b-instant"]
 
