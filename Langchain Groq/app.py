@@ -11,7 +11,7 @@ import time
 
 st.set_page_config(page_title="LangChain Groq", page_icon=":robot_face:")
 
-os.environ["GROQ_API_KEY"] = "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"
+os.environ["GROQ_API_KEY"] = st.secrets['token']
 
 class StreamHandler(BaseCallbackHandler):
     def __init__(self, container, initial_text=""):
@@ -22,8 +22,16 @@ class StreamHandler(BaseCallbackHandler):
         self.text += token
         self.container.markdown(self.text)
 
+st.title("LangChain Groq Chat Application")
+
+# Add model selection dropdown
+model_options = ["llama-3.1-70b-versatile", "llama-3.1-8b-instant"]
+
+selected_model = st.selectbox("Select a model:", model_options)
+
+# Update chat initialization with selected model
 chat = ChatGroq(
-    model_name="llama-3.1-70b-versatile",
+    model_name=selected_model,
     temperature=0.7,
     max_tokens=4096,
     streaming=True
@@ -53,8 +61,6 @@ def get_memory_usage():
     process = psutil.Process(os.getpid())
     return process.memory_info().rss / 1024 / 1024  # Convert to MB
 
-st.title("LangChain Groq Chat Application - LLaMa 3.1 70B")
-
 for message in st.session_state.memory.chat_memory.messages:
     with st.chat_message(message.type):
         st.markdown(message.content)
@@ -78,7 +84,7 @@ if user_input := st.chat_input("What is your message?"):
         final_memory = get_memory_usage()
 
         st.write(f"Estimated token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {input_tokens + output_tokens}")
-        st.write(f"Memory usage - Initial: {initial_memory:.2f} MB, Final: {final_memory:.2f} MB, Difference: {final_memory - initial_memory:.2f} MB")
+        # st.write(f"Memory usage - Initial: {initial_memory:.2f} MB, Final: {final_memory:.2f} MB, Difference: {final_memory - initial_memory:.2f} MB")
         st.write(f"Processing time: {end_time - start_time:.2f} seconds")
 
     # print(st.session_state.memory.chat_memory.messages)
