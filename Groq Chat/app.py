@@ -8,7 +8,13 @@ import psutil
 st.set_page_config(page_title="Chat Groq", page_icon=":robot_face:")
 
 # Set up Groq API key
-os.environ["GROQ_API_KEY"] = "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"
+os.environ["GROQ_API_KEY"] = st.secrets['token']
+
+st.title("Traditional Groq Chat Application - LLaMa 3.1 70B")
+
+model_options = ["llama-3.1-70b-versatile", "llama-3.1-8b-instant"]
+
+selected_model = st.selectbox("Select a model:", model_options)
 
 # Initialize Groq client
 client = groq.Groq()
@@ -28,7 +34,6 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Chat interface
-st.title("Traditional Groq Chat Application - LLaMa 3.1 70B")
 
 # Display chat messages from history
 for message in st.session_state.messages:
@@ -62,7 +67,7 @@ if user_input := st.chat_input("What is your message?"):
         start_time = time.time()
         
         for chunk in client.chat.completions.create(
-            model="llama-3.1-70b-versatile",
+            model=selected_model,
             messages=api_messages,
             max_tokens=4096,
             temperature=0.7,
@@ -86,5 +91,5 @@ if user_input := st.chat_input("What is your message?"):
 
         # Display estimated token usage and memory usage
         st.write(f"Estimated token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {input_tokens + output_tokens}")
-        st.write(f"Memory usage - Initial: {initial_memory:.2f} MB, Final: {final_memory:.2f} MB, Difference: {final_memory - initial_memory:.2f} MB")
+        # st.write(f"Memory usage - Initial: {initial_memory:.2f} MB, Final: {final_memory:.2f} MB, Difference: {final_memory - initial_memory:.2f} MB")
         st.write(f"Processing time: {end_time - start_time:.2f} seconds")
